@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        body{
+            font-family: Montserrat, "Open Sans", Helvetica, Arial, sans-serif;
+        }
+        .outline{
+            color: black;
+            text-shadow:
+            -1px -1px 0 #ffffff,
+            1px -1px 0 #ffffff,
+            -1px 1px 0 #ffffff,
+            1px 1px 0 #ffffff;  
+        }
+        .flagcontainer{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+            width: auto;
+        }
+        .container{
+            display: flexbox;
+            height: 500px;
+            width: 100%;
+            justify-items: center;
+        }
+        .chat-container {
+            width: 95%;
+            height: 100%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .chat-box {
+            flex-grow: 1;
+            padding-bottom: 10px;
+            overflow-y: scroll;
+        }
+        .chat-box p {
+            margin: 5px;
+            padding: 5px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .input-area input {
+            flex-grow: 1;
+            padding: 5px 10px;
+            width: 85%;
+            border: none;
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        input:focus{
+            outline: none;
+            border: none;
+        }
+        .input-area button {
+            padding: 5px 10px;
+            margin-left: 5px;
+            background-color: #84b1ff;
+        }
+        .input-container{
+            height: 40px;
+            align-content: center;
+            justify-content: center;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <image src="orang2.png" width="190px" height="100px" style="position: absolute; transform: translate(0px, 10px);">
+    <b><h1 style="text-align: center; margin:0px; font-weight:bolder;">AI Wonders of</h1>
+    <div class="flagcontainer">
+        <image style="position: relative; transform: translate(150px, 0px);" src="indoneisaflag.png" width="250" height="50">
+        <h1 style="text-align: center; position: absolute; font-size: 50px;" class="outline">INDONESIA</h1>
+        
+    </div>
+    <br>
+    <div class="container">
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <div class="input-area">
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Type a custom message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+            
+        </div>
+    </div>
+    </div>
+    <br>
+    <p style="text-align: center;">Made with ❤️ by <a href="https://samdoescodes.epizy.com">Sam</a></p>
+    <p style="text-align: center;">This is a simple chatbot made using HTML, CSS, Javascript and importantly Python</p>
+    <p style="text-align: center;">The chatbot will not work if the pyton file is not runned</p>
+    
+    <script>
+
+    async function sendMessage() {
+    const userInput = document.getElementById('user-input').value;
+    if (userInput.trim() === '') return;
+    displayMessage('You: ' + userInput);
+    
+    // Send message to backend
+    const response = await fetch("http://127.0.0.1:5000/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userInput }),
+    });
+
+    const data = await response.json();
+    
+    // Assuming the API returns the reply in data.reply
+    displayMessage('Bot: ' + data.reply);  // Change `data` to `data.reply`
+    document.getElementById('user-input').value = "";
+}
+
+        function displayMessage(message){
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight
+        }
+    </script>
+</body>
+</html>
